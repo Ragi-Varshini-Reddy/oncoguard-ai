@@ -1,4 +1,4 @@
-# OralCare-AI
+# OncoGuard-AI
 
 Explainable multimodal oral cancer diagnosis-support prototype for the KR0468 hackathon track.
 
