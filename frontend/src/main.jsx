@@ -22,8 +22,8 @@ import {
   inferFusion,
   inferGenomicsFile,
   trainGenomics,
-} from "./api";
-import "./styles.css";
+} from "./services/api";
+import "./assets/styles.css";
 
 const roleIcons = {
   patient: UserRound,

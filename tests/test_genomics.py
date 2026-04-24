@@ -5,9 +5,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.common.config import load_config
-from src.phase3_genomics.artifact_model import train_genomics_artifacts
-from src.phase3_genomics.inference import run_genomics_from_table, run_genomics_inference
+from backend.ml.common.config import load_config
+from backend.ml.phase3_genomics.artifact_model import train_genomics_artifacts
+from backend.ml.phase3_genomics.inference import run_genomics_from_table, run_genomics_inference
 
 
 class GenomicsInferenceTest(unittest.TestCase):

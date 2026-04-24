@@ -17,6 +17,8 @@ artifacts/*.pkl
 artifacts/*.pt
 artifacts/*.pth
 artifacts/*.onnx
+artifacts/*.sqlite3
+artifacts/documents/
 
 # Local data exports
 data/processed/*.csv

@@ -50,6 +50,36 @@ Inference requires a trained artifact at `artifacts/genomics_model.joblib`. The 
 
 See [docs/REAL_MODEL_PLAN.md](docs/REAL_MODEL_PLAN.md).
 
+## Patient Query LLM
+
+The patient query assistant uses local Ollama by default:
+
+```bash
+ollama serve
+ollama pull llama3.1:8b
+```
+
+Configured default:
+
+```text
+provider: ollama
+model: llama3.1:8b
+```
+
+To use Gemini instead, set:
+
+```bash
+export GEMINI_API_KEY=...
+```
+
+and change `llm.provider` in `configs/prototype_config.yaml` to:
+
+```text
+gemini
+```
+
+The backend falls back to deterministic answers if the LLM is unavailable.
+
 ## Team Phase Folders
 
 The work is split so three people can develop in parallel while sharing one backend, one frontend, and one contract system.

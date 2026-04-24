@@ -4,8 +4,8 @@ import unittest
 
 from pydantic import ValidationError
 
-from src.common.config import load_config
-from src.common.contracts import ModuleOutput
+from backend.ml.common.config import load_config
+from backend.ml.common.contracts import ModuleOutput
 
 
 class ConfigAndContractsTest(unittest.TestCase):

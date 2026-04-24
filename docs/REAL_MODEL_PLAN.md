@@ -140,6 +140,8 @@ Best practical approach:
 
 Do not train a fusion model by mixing unrelated patients from different datasets.
 
+Current implementation details are documented in [FUSION_XAI_ARCHITECTURE.md](FUSION_XAI_ARCHITECTURE.md).
+
 ## Users
 
 ### Patient
@@ -149,6 +151,7 @@ Needs:
 - plain-language result summary
 - downloadable patient-friendly report
 - clear disclaimer and next-step guidance
+- LLM-powered Q&A grounded in available model outputs and fusion XAI
 
 Should not see:
 
@@ -187,6 +190,31 @@ Implemented now:
 - FastAPI backend
 - React/Vite frontend
 - role-specific UI for patient, doctor, and lab technician
+- patient query assistant with Ollama local LLM by default and optional Gemini provider
+
+## LLM Patient Query Assistant
+
+Default local provider:
+
+- Ollama
+- `llama3.1:8b`
+
+Optional cloud provider:
+
+- Gemini API
+- `gemini-3-pro-preview`
+- requires `GEMINI_API_KEY`
+
+The assistant is grounded only in:
+
+- module outputs
+- fusion output
+- modality contributions
+- XAI top features
+- warnings
+- missing modality information
+
+It must not produce a final diagnosis. If the LLM is unavailable, the backend falls back to deterministic rule-based answers.
 
 Pending real data:
 
