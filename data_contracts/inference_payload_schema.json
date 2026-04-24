@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "module_output_required_fields": [
+    "patient_id",
+    "modality",
+    "status",
+    "embedding",
+    "embedding_dim",
+    "prediction",
+    "confidence",
+    "explanations",
+    "schema_version"
+  ],
+  "fusion_input_required_fields": ["patient_id", "module_outputs", "modality_mask"],
+  "fusion_output_required_fields": [
+    "patient_id",
+    "diagnosis",
+    "risk",
+    "confidence",
+    "modality_contributions",
+    "warnings",
+    "schema_version"
+  ],
+  "allowed_modalities": ["intraoral", "clinical", "histopathology", "genomics"],
+  "allowed_statuses": ["available", "missing", "error"]
+}

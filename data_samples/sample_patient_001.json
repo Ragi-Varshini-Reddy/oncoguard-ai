@@ -1,0 +1,38 @@
+{
+  "patient_id": "P001",
+  "source": "demo",
+  "notes": "Synthetic multimodal sample for hackathon demo. Not patient-matched to external datasets.",
+  "clinical": {
+    "age": 58,
+    "sex": "female",
+    "tobacco_use": true,
+    "alcohol_use": false,
+    "lesion_site": "lateral tongue",
+    "lesion_size_cm": 2.4,
+    "persistent_ulcer_weeks": 7,
+    "neck_node_present": true
+  },
+  "genomics": {
+    "sample_id": "P001-GX",
+    "features": {
+      "TP53_expr": 0.81,
+      "CDKN2A_expr": 0.27,
+      "EGFR_expr": 0.76,
+      "PIK3CA_expr": 0.62,
+      "NOTCH1_expr": 0.31,
+      "CCND1_expr": 0.71,
+      "FAT1_expr": 0.52,
+      "CASP8_expr": 0.24,
+      "HRAS_expr": 0.33,
+      "MET_expr": 0.69,
+      "MYC_expr": 0.79,
+      "MDM2_expr": 0.5
+    }
+  },
+  "available_modalities": {
+    "intraoral": false,
+    "clinical": true,
+    "histopathology": false,
+    "genomics": true
+  }
+}

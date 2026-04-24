@@ -1,0 +1,1 @@
+"""OralCare-AI API application."""

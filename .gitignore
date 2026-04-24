@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Generated local artifacts
+artifacts/*.joblib
+artifacts/*.pkl
+artifacts/*.pt
+artifacts/*.pth
+artifacts/*.onnx
+
+# Local data exports
+data/processed/*.csv
+data/processed/*.parquet
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/

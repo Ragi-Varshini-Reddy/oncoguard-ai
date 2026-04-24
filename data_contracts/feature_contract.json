@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "embedding_dims": {
+    "intraoral": 256,
+    "clinical": 128,
+    "histopathology": 256,
+    "genomics": 128
+  },
+  "genomics": {
+    "feature_order": [
+      "TP53_expr",
+      "CDKN2A_expr",
+      "EGFR_expr",
+      "PIK3CA_expr",
+      "NOTCH1_expr",
+      "CCND1_expr",
+      "FAT1_expr",
+      "CASP8_expr",
+      "HRAS_expr",
+      "MET_expr",
+      "MYC_expr",
+      "MDM2_expr"
+    ],
+    "input_format": "model-ready gene expression or mutation-summary features; no FASTQ/BAM/VCF processing"
+  }
+}

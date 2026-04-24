@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "diagnosis_classes": ["benign", "precancer", "cancer"],
+  "risk_classes": {
+    "low": {"min": 0.0, "max": 0.39},
+    "medium": {"min": 0.4, "max": 0.69},
+    "high": {"min": 0.7, "max": 1.0}
+  },
+  "allowed_modalities": ["intraoral", "clinical", "histopathology", "genomics"],
+  "allowed_statuses": ["available", "missing", "error"],
+  "disclaimer": "Decision-support prototype only. Not a final medical diagnosis or clinically validated risk tool."
+}
