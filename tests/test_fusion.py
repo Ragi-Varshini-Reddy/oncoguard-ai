@@ -61,6 +61,19 @@ class FusionTest(unittest.TestCase):
         self.assertEqual(genomics.embedding, original_genomics_embedding)
         self.assertIn("clinical", fusion.what_if["selected_disabled_modalities"])
 
+    def test_clinical_inference_regression_without_age_sex(self) -> None:
+        patient_id = self.sample["patient_id"]
+        clinical_data = {key: value for key, value in self.sample["clinical"].items() if key not in ["age", "sex"]}
+        clinical_without_age_sex = run_clinical_inference(patient_id, clinical_data, self.config)
+
+        self.assertEqual(clinical_without_age_sex.status, "available")
+        feature_names = [item["feature"] for item in clinical_without_age_sex.explanations.get("top_features", [])]
+        self.assertIn("tobacco_use", feature_names)
+        self.assertIn("alcohol_use", feature_names)
+        recommendations = clinical_without_age_sex.explanations.get("recommendations", [])
+        self.assertTrue(any("Tobacco use" in item for item in recommendations))
+        self.assertTrue(any("Alcohol use" in item for item in recommendations))
+
     def test_error_and_low_confidence_modalities_are_penalized_or_ignored(self) -> None:
         patient_id = "P-XAI"
         low_confidence = ModuleOutput(
@@ -136,6 +149,80 @@ class FusionTest(unittest.TestCase):
         fusion = run_fusion(patient_id, outputs, config=self.config)
         self.assertAlmostEqual(sum(fusion.modality_contributions.values()), 1.0, places=2)
         self.assertIn("disagree", " ".join(fusion.warnings).lower())
+
+    def test_fusion_exposes_gated_weighting_factors(self) -> None:
+        patient_id = "P-GATED"
+        outputs = [
+            ModuleOutput(
+                patient_id=patient_id,
+                modality="clinical",
+                status="available",
+                embedding=[0.1] * 128,
+                embedding_dim=128,
+                prediction={"risk_score": 0.62, "diagnosis_probability": 0.62},
+                confidence=0.82,
+                explanations={},
+            ),
+            ModuleOutput(
+                patient_id=patient_id,
+                modality="genomics",
+                status="available",
+                embedding=[0.1] * 128,
+                embedding_dim=128,
+                prediction={"risk_score": 0.68, "diagnosis_probability": 0.68},
+                confidence=0.78,
+                explanations={},
+            ),
+        ]
+        fusion = run_fusion(patient_id, outputs, config=self.config)
+        clinical_evidence = fusion.modality_evidence["clinical"]
+        self.assertGreater(clinical_evidence["signal_strength"], 0.0)
+        self.assertGreater(clinical_evidence["agreement_factor"], 0.0)
+        self.assertGreater(clinical_evidence["gated_weight"], 0.0)
+        self.assertIn("agreement", fusion.decision_trace[0])
+
+    def test_high_risk_guardrail_limits_dilution(self) -> None:
+        patient_id = "P-GUARD"
+        outputs = [
+            ModuleOutput(
+                patient_id=patient_id,
+                modality="histopathology",
+                status="available",
+                embedding=[0.1] * 256,
+                embedding_dim=256,
+                prediction={"risk_score": 0.94, "diagnosis_probability": 0.94},
+                confidence=0.95,
+                explanations={},
+            ),
+            ModuleOutput(
+                patient_id=patient_id,
+                modality="clinical",
+                status="available",
+                embedding=[0.1] * 128,
+                embedding_dim=128,
+                prediction={"risk_score": 0.18, "diagnosis_probability": 0.18},
+                confidence=0.8,
+                explanations={},
+            ),
+            ModuleOutput(
+                patient_id=patient_id,
+                modality="genomics",
+                status="available",
+                embedding=[0.1] * 128,
+                embedding_dim=128,
+                prediction={"risk_score": 0.25, "diagnosis_probability": 0.25},
+                confidence=0.76,
+                explanations={},
+            ),
+        ]
+        fusion = run_fusion(patient_id, outputs, config=self.config)
+        details = fusion.model_dump().get("fusion_details", {})
+        self.assertEqual(details["high_risk_guardrail"]["modality"], "histopathology")
+        self.assertGreater(
+            fusion.risk.model_dump(by_alias=True)["score"],
+            details["high_risk_guardrail"]["original_risk_score"],
+        )
+        self.assertIn("guardrail", " ".join(fusion.decision_trace).lower())
 
 
 if __name__ == "__main__":

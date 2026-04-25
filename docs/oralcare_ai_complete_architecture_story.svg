@@ -1,0 +1,381 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1850" viewBox="0 0 2200 1850" role="img" aria-labelledby="title desc">
+  <title id="title">OralCare-AI Complete Architecture Story</title>
+  <desc id="desc">Comprehensive OralCare-AI architecture diagram showing users, frontend, backend, AI modalities, fusion, XAI, RAG chatbot, database, reports, tech stack, terminology, and why each layer is used.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f4f8fb; }
+      .title { font: 800 42px Arial, Helvetica, sans-serif; fill: #10222f; }
+      .subtitle { font: 500 18px Arial, Helvetica, sans-serif; fill: #617383; }
+      .section { fill: #ffffff; stroke: #d5e1e9; stroke-width: 2; }
+      .sectionTitle { font: 800 23px Arial, Helvetica, sans-serif; fill: #122231; }
+      .sectionSub { font: 500 13px Arial, Helvetica, sans-serif; fill: #667888; }
+      .box { fill: #ffffff; stroke: #c7d6df; stroke-width: 1.5; }
+      .dark { fill: #17313d; stroke: #17313d; }
+      .blue { fill: #e7f3fb; stroke: #75a9c9; }
+      .green { fill: #edf8f1; stroke: #80bd96; }
+      .amber { fill: #fff6df; stroke: #ddb15b; }
+      .red { fill: #fff0ed; stroke: #d98379; }
+      .purple { fill: #f4eeff; stroke: #aa8bd8; }
+      .teal { fill: #e8f7f7; stroke: #70b9ba; }
+      .gray { fill: #f7fafc; stroke: #d5e1e9; }
+      .label { font: 800 16px Arial, Helvetica, sans-serif; fill: #122231; }
+      .labelLight { font: 800 16px Arial, Helvetica, sans-serif; fill: #ffffff; }
+      .small { font: 500 12px Arial, Helvetica, sans-serif; fill: #506171; }
+      .smallLight { font: 500 12px Arial, Helvetica, sans-serif; fill: #dce8ee; }
+      .tiny { font: 500 11px Arial, Helvetica, sans-serif; fill: #657384; }
+      .metric { font: 800 20px Arial, Helvetica, sans-serif; fill: #b13d3d; }
+      .arrow { fill: none; stroke: #3d6675; stroke-width: 2.4; marker-end: url(#arrow); }
+      .arrowSoft { fill: none; stroke: #8aa8b4; stroke-width: 1.8; marker-end: url(#arrowSoft); }
+      .arrowRed { fill: none; stroke: #b13d3d; stroke-width: 2.5; marker-end: url(#arrowRed); }
+      .dash { fill: none; stroke: #8aa8b4; stroke-width: 1.6; stroke-dasharray: 7 6; marker-end: url(#arrowSoft); }
+      .pill { fill: #ecf2f5; stroke: #d5e1e9; }
+      .callout { fill: #fbfdfe; stroke: #d5e1e9; stroke-width: 1.6; stroke-dasharray: 8 7; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#3d6675"/>
+    </marker>
+    <marker id="arrowSoft" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#8aa8b4"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#b13d3d"/>
+    </marker>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#17313d" flood-opacity="0.13"/>
+    </filter>
+  </defs>
+
+  <rect class="bg" width="2200" height="1500"/>
+
+  <text x="70" y="70" class="title">OralCare-AI Complete Architecture Story</text>
+  <text x="70" y="104" class="subtitle">Multimodal oral cancer decision-support: evidence ingestion, AI models, fusion, explainability, doctor approval, patient communication, and RAG chatbot.</text>
+
+  <!-- Problem and value strip -->
+  <rect x="70" y="132" width="2060" height="92" rx="18" class="callout"/>
+  <text x="104" y="166" class="label">Problem Statement</text>
+  <text x="104" y="191" class="small">Oral cancer evidence is fragmented across images, pathology, genomics, clinical history, appointments, and reports. A one-time classifier does not match the real clinical journey.</text>
+  <text x="1230" y="166" class="label">Our Solution</text>
+  <text x="1230" y="191" class="small">A doctor-in-the-loop, explainable multimodal workflow that converts evidence into risk trends, validated reports, and simple patient answers.</text>
+
+  <!-- Users -->
+  <rect x="70" y="260" width="310" height="360" rx="18" class="section" filter="url(#shadow)"/>
+  <text x="100" y="300" class="sectionTitle">Users and Roles</text>
+  <text x="100" y="322" class="sectionSub">Clinical workflow actors</text>
+
+  <rect x="100" y="356" width="250" height="64" rx="12" class="blue"/>
+  <text x="125" y="383" class="label">Patient</text>
+  <text x="125" y="404" class="small">Daily uploads, report, chat, appointments</text>
+
+  <rect x="100" y="446" width="250" height="64" rx="12" class="green"/>
+  <text x="125" y="473" class="label">Doctor</text>
+  <text x="125" y="494" class="small">Review XAI, edit, validate, approve</text>
+
+  <rect x="100" y="536" width="250" height="64" rx="12" class="amber"/>
+  <text x="125" y="563" class="label">Lab Technician</text>
+  <text x="125" y="584" class="small">Upload modality files and reports</text>
+
+  <!-- Frontend -->
+  <rect x="440" y="260" width="390" height="360" rx="18" class="section" filter="url(#shadow)"/>
+  <text x="470" y="300" class="sectionTitle">Frontend Layer</text>
+  <text x="470" y="322" class="sectionSub">React + Vite single-page app</text>
+
+  <rect x="470" y="356" width="150" height="58" rx="11" class="blue"/>
+  <text x="492" y="381" class="label">React</text>
+  <text x="492" y="400" class="small">Reusable dashboards</text>
+
+  <rect x="650" y="356" width="150" height="58" rx="11" class="green"/>
+  <text x="672" y="381" class="label">Vite</text>
+  <text x="672" y="400" class="small">Fast dev/build</text>
+
+  <rect x="470" y="438" width="150" height="58" rx="11" class="amber"/>
+  <text x="492" y="463" class="label">Recharts</text>
+  <text x="492" y="482" class="small">Risk + proportions</text>
+
+  <rect x="650" y="438" width="150" height="58" rx="11" class="purple"/>
+  <text x="672" y="463" class="label">Three.js</text>
+  <text x="672" y="482" class="small">3D lab feedback</text>
+
+  <rect x="470" y="520" width="330" height="58" rx="11" class="teal"/>
+  <text x="492" y="545" class="label">Role Dashboards</text>
+  <text x="492" y="564" class="small">Patient, doctor, technician, chat, reports, appointments</text>
+
+  <!-- Backend -->
+  <rect x="890" y="260" width="420" height="360" rx="18" class="section" filter="url(#shadow)"/>
+  <text x="920" y="300" class="sectionTitle">Backend Orchestration</text>
+  <text x="920" y="322" class="sectionSub">FastAPI + Pydantic + RBAC</text>
+
+  <rect x="920" y="356" width="160" height="58" rx="11" class="dark"/>
+  <text x="943" y="381" class="labelLight">FastAPI</text>
+  <text x="943" y="400" class="smallLight">Python ML-native API</text>
+
+  <rect x="1115" y="356" width="160" height="58" rx="11" class="blue"/>
+  <text x="1138" y="381" class="label">Pydantic</text>
+  <text x="1138" y="400" class="small">Typed contracts</text>
+
+  <rect x="920" y="438" width="160" height="58" rx="11" class="red"/>
+  <text x="943" y="463" class="label">RBAC</text>
+  <text x="943" y="482" class="small">Role access control</text>
+
+  <rect x="1115" y="438" width="160" height="58" rx="11" class="green"/>
+  <text x="1138" y="463" class="label">Workflow APIs</text>
+  <text x="1138" y="482" class="small">Uploads, reports, chat</text>
+
+  <rect x="920" y="520" width="355" height="58" rx="11" class="amber"/>
+  <text x="943" y="545" class="label">Clinical Orchestration</text>
+  <text x="943" y="564" class="small">Routes data to AI, fusion, DB, RAG, and reports</text>
+
+  <!-- AI modalities -->
+  <rect x="1370" y="260" width="760" height="360" rx="18" class="section" filter="url(#shadow)"/>
+  <text x="1400" y="300" class="sectionTitle">AI/ML Modality Layer</text>
+  <text x="1400" y="322" class="sectionSub">Each modality becomes a standard ModuleOutput</text>
+
+  <rect x="1400" y="356" width="330" height="76" rx="12" class="blue"/>
+  <text x="1426" y="383" class="label">Intraoral AI</text>
+  <text x="1426" y="404" class="small">EfficientNet-B0 for oral photo risk</text>
+  <text x="1426" y="422" class="tiny">Why: lightweight, fast, good transfer-learning baseline</text>
+
+  <rect x="1760" y="356" width="330" height="76" rx="12" class="amber"/>
+  <text x="1786" y="383" class="label">Histopathology AI</text>
+  <text x="1786" y="404" class="small">EfficientNet-B4 + Grad-CAM heatmap</text>
+  <text x="1786" y="422" class="tiny">Why: higher capacity for tissue morphology</text>
+
+  <rect x="1400" y="462" width="330" height="76" rx="12" class="green"/>
+  <text x="1426" y="489" class="label">Clinical AI</text>
+  <text x="1426" y="510" class="small">Tabular risk model + SHAP-style drivers</text>
+  <text x="1426" y="528" class="tiny">Why: interpretable structured risk factors</text>
+
+  <rect x="1760" y="462" width="330" height="76" rx="12" class="purple"/>
+  <text x="1786" y="489" class="label">Genomics AI</text>
+  <text x="1786" y="510" class="small">Scikit-learn/joblib gene-panel artifact</text>
+  <text x="1786" y="528" class="tiny">Why: reproducible tabular preprocessing + model</text>
+
+  <rect x="1400" y="560" width="690" height="38" rx="10" class="dark"/>
+  <text x="1426" y="585" class="labelLight">ModuleOutput = prediction + confidence + embedding + warnings + explanations + quality flags</text>
+
+  <!-- Contract / flow band -->
+  <rect x="70" y="675" width="2060" height="125" rx="18" class="section" filter="url(#shadow)"/>
+  <text x="104" y="715" class="sectionTitle">Standard Evidence Contract</text>
+  <text x="104" y="737" class="sectionSub">This decouples model internals from the fusion layer and makes the system modular.</text>
+
+  <rect x="470" y="714" width="190" height="48" rx="24" class="pill"/>
+  <text x="505" y="744" class="label">Prediction</text>
+  <rect x="700" y="714" width="190" height="48" rx="24" class="pill"/>
+  <text x="735" y="744" class="label">Confidence</text>
+  <rect x="930" y="714" width="190" height="48" rx="24" class="pill"/>
+  <text x="975" y="744" class="label">Embedding</text>
+  <rect x="1160" y="714" width="190" height="48" rx="24" class="pill"/>
+  <text x="1205" y="744" class="label">Warnings</text>
+  <rect x="1390" y="714" width="190" height="48" rx="24" class="pill"/>
+  <text x="1428" y="744" class="label">XAI Metadata</text>
+  <rect x="1620" y="714" width="190" height="48" rx="24" class="pill"/>
+  <text x="1656" y="744" class="label">Quality Flags</text>
+
+  <!-- Fusion and XAI -->
+  <rect x="70" y="855" width="820" height="390" rx="18" class="section" filter="url(#shadow)"/>
+  <text x="100" y="895" class="sectionTitle">Fusion + XAI Decision Layer</text>
+  <text x="100" y="917" class="sectionSub">Evidence-weighted late fusion, missing-modality awareness, doctor-validatable explanations</text>
+
+  <rect x="100" y="955" width="220" height="80" rx="13" class="teal"/>
+  <text x="126" y="985" class="label">Late Fusion</text>
+  <text x="126" y="1006" class="small">Combines decisions after each modality model</text>
+  <text x="126" y="1024" class="tiny">Why: safer without true patient-matched multimodal data</text>
+
+  <rect x="355" y="955" width="220" height="80" rx="13" class="blue"/>
+  <text x="381" y="985" class="label">Missing-Modality Aware</text>
+  <text x="381" y="1006" class="small">Works with any subset of 4 modalities</text>
+  <text x="381" y="1024" class="tiny">Marks missing evidence and lowers confidence</text>
+
+  <rect x="610" y="955" width="220" height="80" rx="13" class="red"/>
+  <text x="636" y="985" class="label">Prediction Heads</text>
+  <text x="636" y="1006" class="small">Risk, diagnosis support, confidence</text>
+  <text x="636" y="1024" class="tiny">Produces final clinical-review summary</text>
+
+  <rect x="100" y="1070" width="220" height="80" rx="13" class="green"/>
+  <text x="126" y="1100" class="label">Contribution Chart</text>
+  <text x="126" y="1121" class="small">Shows which modality influenced the result</text>
+
+  <rect x="355" y="1070" width="220" height="80" rx="13" class="amber"/>
+  <text x="381" y="1100" class="label">Decision Trace</text>
+  <text x="381" y="1121" class="small">Human-readable steps for doctor validation</text>
+
+  <rect x="610" y="1070" width="220" height="80" rx="13" class="purple"/>
+  <text x="636" y="1100" class="label">What-if XAI</text>
+  <text x="636" y="1121" class="small">Leave-one-out modality impact analysis</text>
+
+  <rect x="100" y="1182" width="730" height="38" rx="10" class="dark"/>
+  <text x="126" y="1207" class="labelLight">Output: fused risk score, risk class, confidence, warnings, trace, what-if, modality proportions</text>
+
+  <!-- Data and RAG -->
+  <rect x="955" y="855" width="570" height="390" rx="18" class="section" filter="url(#shadow)"/>
+  <text x="985" y="895" class="sectionTitle">Persistence + RAG Layer</text>
+  <text x="985" y="917" class="sectionSub">Clinical memory, vector context, and grounded chatbot retrieval</text>
+
+  <rect x="985" y="955" width="240" height="68" rx="12" class="blue"/>
+  <text x="1011" y="982" class="label">MySQL</text>
+  <text x="1011" y="1003" class="small">Users, patients, model runs, approvals</text>
+
+  <rect x="1255" y="955" width="240" height="68" rx="12" class="green"/>
+  <text x="1281" y="982" class="label">Artifacts</text>
+  <text x="1281" y="1003" class="small">Uploads, model files, generated PDFs</text>
+
+  <rect x="985" y="1055" width="240" height="68" rx="12" class="purple"/>
+  <text x="1011" y="1082" class="label">ChromaDB</text>
+  <text x="1011" y="1103" class="small">Processed patient context vectors</text>
+
+  <rect x="1255" y="1055" width="240" height="68" rx="12" class="amber"/>
+  <text x="1281" y="1082" class="label">RAG</text>
+  <text x="1281" y="1103" class="small">Retrieval-Augmented Generation</text>
+
+  <rect x="985" y="1155" width="240" height="68" rx="12" class="teal"/>
+  <text x="1011" y="1182" class="label">Gemini / Ollama</text>
+  <text x="1011" y="1203" class="small">LLM provider + local fallback</text>
+
+  <rect x="1255" y="1155" width="240" height="68" rx="12" class="red"/>
+  <text x="1281" y="1182" class="label">No Raw Images to LLM</text>
+  <text x="1281" y="1203" class="small">Uses processed findings only</text>
+
+  <!-- Doctor/patient outputs -->
+  <rect x="1585" y="855" width="545" height="390" rx="18" class="section" filter="url(#shadow)"/>
+  <text x="1615" y="895" class="sectionTitle">Clinical Outputs and Impact</text>
+  <text x="1615" y="917" class="sectionSub">Doctor-in-the-loop safety and patient-centered communication</text>
+
+  <rect x="1615" y="955" width="225" height="68" rx="12" class="green"/>
+  <text x="1641" y="982" class="label">Doctor Review</text>
+  <text x="1641" y="1003" class="small">Documents, charts, trace, XAI</text>
+
+  <rect x="1875" y="955" width="225" height="68" rx="12" class="amber"/>
+  <text x="1901" y="982" class="label">Report Approval</text>
+  <text x="1901" y="1003" class="small">Doctor edits before final result</text>
+
+  <rect x="1615" y="1055" width="225" height="68" rx="12" class="blue"/>
+  <text x="1641" y="1082" class="label">Patient Dashboard</text>
+  <text x="1641" y="1103" class="small">Status, trend, daily upload, PDF</text>
+
+  <rect x="1875" y="1055" width="225" height="68" rx="12" class="purple"/>
+  <text x="1901" y="1082" class="label">Patient Chatbot</text>
+  <text x="1901" y="1103" class="small">Simple, grounded explanations</text>
+
+  <rect x="1615" y="1155" width="485" height="68" rx="12" class="dark"/>
+  <text x="1641" y="1182" class="labelLight">Impact</text>
+  <text x="1641" y="1203" class="smallLight">Earlier review, explainable evidence, patient clarity, continuous monitoring</text>
+
+  <!-- Metrics band -->
+  <rect x="70" y="1290" width="2060" height="110" rx="18" class="section" filter="url(#shadow)"/>
+  <text x="104" y="1330" class="sectionTitle">Prototype/Internal Validation Metrics</text>
+  <text x="104" y="1352" class="sectionSub">Use as hackathon/demo metrics; replace with locked test-set metrics before clinical publication.</text>
+
+  <text x="380" y="1340" class="metric">0.862</text>
+  <text x="380" y="1363" class="small">Intraoral AUROC</text>
+  <text x="610" y="1340" class="metric">0.985</text>
+  <text x="610" y="1363" class="small">Histopathology AUROC</text>
+  <text x="880" y="1340" class="metric">0.934</text>
+  <text x="880" y="1363" class="small">Clinical AUROC</text>
+  <text x="1110" y="1340" class="metric">0.851</text>
+  <text x="1110" y="1363" class="small">Genomics AUROC</text>
+  <text x="1340" y="1340" class="metric">0.791</text>
+  <text x="1340" y="1363" class="small">Fusion AUROC</text>
+  <text x="1560" y="1340" class="metric">78.4%</text>
+  <text x="1560" y="1363" class="small">Fusion sensitivity</text>
+  <text x="1785" y="1340" class="metric">Any subset of 4</text>
+  <text x="1785" y="1363" class="small">Missing-modality support</text>
+  <text x="2000" y="1340" class="metric">Full XAI</text>
+  <text x="2000" y="1363" class="small">Trace, chart, warnings, what-if</text>
+
+  <!-- Closing -->
+  <rect x="70" y="1430" width="2060" height="45" rx="14" class="dark"/>
+  <text x="104" y="1459" class="labelLight">Closing pitch: OralCare-AI is not just a cancer classifier; it is the explainable workflow around it, turning fragmented evidence into doctor-reviewed action faster.</text>
+
+  <!-- Four-model-to-fusion detailed flow -->
+  <rect x="70" y="1515" width="2060" height="275" rx="18" class="section" filter="url(#shadow)"/>
+  <text x="104" y="1555" class="sectionTitle">Detailed Flow: Parallel Modality Processing to Fusion</text>
+  <text x="104" y="1577" class="sectionSub">All four models run independently in parallel. Fusion starts only after available modality outputs are normalized into standard evidence packets.</text>
+
+  <rect x="100" y="1612" width="230" height="54" rx="13" class="blue"/>
+  <text x="126" y="1635" class="label">Intraoral Model</text>
+  <text x="126" y="1655" class="small">EfficientNet-B0 photo risk</text>
+
+  <rect x="100" y="1680" width="230" height="54" rx="13" class="green"/>
+  <text x="126" y="1703" class="label">Clinical Model</text>
+  <text x="126" y="1723" class="small">Tabular risk + SHAP-style drivers</text>
+
+  <rect x="100" y="1748" width="230" height="54" rx="13" class="amber"/>
+  <text x="126" y="1771" class="label">Histopathology Model</text>
+  <text x="126" y="1791" class="small">EfficientNet-B4 + Grad-CAM</text>
+
+  <rect x="390" y="1680" width="230" height="54" rx="13" class="purple"/>
+  <text x="416" y="1703" class="label">Genomics Model</text>
+  <text x="416" y="1723" class="small">Gene-panel artifact model</text>
+
+  <rect x="700" y="1625" width="280" height="154" rx="16" class="dark"/>
+  <text x="732" y="1656" class="labelLight">ModuleOutput Packets</text>
+  <text x="732" y="1680" class="smallLight">One packet per available modality</text>
+  <text x="732" y="1704" class="smallLight">prediction + risk score</text>
+  <text x="732" y="1728" class="smallLight">confidence + embedding</text>
+  <text x="732" y="1752" class="smallLight">warnings + XAI + quality flags</text>
+
+  <rect x="1060" y="1625" width="285" height="154" rx="16" class="teal"/>
+  <text x="1092" y="1656" class="label">Fusion Engine</text>
+  <text x="1092" y="1680" class="small">Dynamic weights per patient</text>
+  <text x="1092" y="1704" class="small">prior x confidence x quality</text>
+  <text x="1092" y="1728" class="small">signal strength x agreement</text>
+  <text x="1092" y="1752" class="small">missing-modality aware</text>
+
+  <rect x="1425" y="1625" width="260" height="154" rx="16" class="red"/>
+  <text x="1457" y="1656" class="label">FusionOutput</text>
+  <text x="1457" y="1680" class="small">fused risk + diagnosis support</text>
+  <text x="1457" y="1704" class="small">calibrated confidence</text>
+  <text x="1457" y="1728" class="small">modality contribution chart</text>
+  <text x="1457" y="1752" class="small">trace, warnings, what-if XAI</text>
+
+  <rect x="1765" y="1625" width="305" height="154" rx="16" class="green"/>
+  <text x="1797" y="1656" class="label">Clinical Action</text>
+  <text x="1797" y="1680" class="small">risk history updated</text>
+  <text x="1797" y="1704" class="small">doctor validates and edits report</text>
+  <text x="1797" y="1728" class="small">approved PDF visible to patient</text>
+  <text x="1797" y="1752" class="small">processed summary indexed for RAG</text>
+
+  <path d="M330 1639 C470 1639, 560 1642, 700 1656" class="arrow"/>
+  <path d="M330 1707 C470 1707, 560 1706, 700 1704" class="arrow"/>
+  <path d="M330 1775 C470 1775, 560 1762, 700 1752" class="arrow"/>
+  <path d="M620 1707 C650 1707, 670 1706, 700 1704" class="arrow"/>
+  <path d="M980 1702 C1010 1702, 1030 1702, 1060 1702" class="arrow"/>
+  <path d="M1345 1702 C1375 1702, 1395 1702, 1425 1702" class="arrow"/>
+  <path d="M1685 1702 C1715 1702, 1735 1702, 1765 1702" class="arrowRed"/>
+
+  <rect x="700" y="1798" width="1370" height="26" rx="13" class="pill"/>
+  <text x="725" y="1816" class="tiny">Parallel design: missing models do not block the pipeline; available ModuleOutputs are fused, missing modalities are flagged, and confidence reflects evidence coverage.</text>
+
+  <!-- Main arrows -->
+  <path d="M380 440 C405 440, 415 440, 440 440" class="arrow"/>
+  <path d="M830 440 C855 440, 865 440, 890 440" class="arrow"/>
+  <path d="M1310 440 C1335 440, 1345 440, 1370 440" class="arrow"/>
+  <path d="M1750 620 C1750 650, 1620 655, 1580 675" class="arrow"/>
+  <path d="M1580 800 C1280 825, 780 825, 480 855" class="arrow"/>
+  <path d="M890 1050 C915 1050, 930 1050, 955 1050" class="arrowSoft"/>
+  <path d="M1525 1050 C1550 1050, 1560 1050, 1585 1050" class="arrow"/>
+  <path d="M1858 1245 L1858 1290" class="arrowRed"/>
+  <path d="M480 1245 L480 1290" class="arrowRed"/>
+  <path d="M1240 1245 L1240 1290" class="arrowRed"/>
+
+  <!-- Terminology side notes -->
+  <rect x="70" y="635" width="250" height="34" rx="17" class="pill"/>
+  <text x="94" y="657" class="tiny">Terminology: Modality = one evidence type</text>
+
+  <rect x="340" y="635" width="300" height="34" rx="17" class="pill"/>
+  <text x="364" y="657" class="tiny">Late fusion = combine decisions after individual models</text>
+
+  <rect x="660" y="635" width="250" height="34" rx="17" class="pill"/>
+  <text x="684" y="657" class="tiny">XAI = Explainable Artificial Intelligence</text>
+
+  <rect x="930" y="635" width="310" height="34" rx="17" class="pill"/>
+  <text x="954" y="657" class="tiny">RAG = Retrieval-Augmented Generation for grounded answers</text>
+
+  <rect x="1260" y="635" width="280" height="34" rx="17" class="pill"/>
+  <text x="1284" y="657" class="tiny">RBAC = role-based access control</text>
+
+  <rect x="1560" y="635" width="340" height="34" rx="17" class="pill"/>
+  <text x="1584" y="657" class="tiny">Doctor-in-the-loop = clinician validates before patient result</text>
+
+  <rect x="1920" y="635" width="210" height="34" rx="17" class="pill"/>
+  <text x="1944" y="657" class="tiny">AUROC = classifier ranking quality</text>
+</svg>

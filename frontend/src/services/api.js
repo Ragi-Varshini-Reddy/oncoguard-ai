@@ -18,6 +18,20 @@ async function request(path, options = {}) {
   return response;
 }
 
+async function requestBinary(path, options = {}) {
+  const storedUser = JSON.parse(localStorage.getItem("oralcare_user") || "null");
+  const headers = new Headers(options.headers || {});
+  if (storedUser?.user?.user_id) {
+    headers.set("X-User-Id", storedUser.user.user_id);
+  }
+  const response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: response.statusText }));
+    throw new Error(error.detail || "Request failed");
+  }
+  return response;
+}
+
 export function getHealth() {
   return request("/api/health");
 }
@@ -52,6 +66,11 @@ export function getPatient(patientId) {
 
 export function getPatientDocuments(patientId) {
   return request(`/api/patients/${encodeURIComponent(patientId)}/documents`);
+}
+
+export async function getPatientDocumentBlob(patientId, documentId) {
+  const response = await requestBinary(`/api/patients/${encodeURIComponent(patientId)}/documents/${encodeURIComponent(documentId)}/view`);
+  return response.blob();
 }
 
 export function getPatientModelRuns(patientId) {
@@ -98,6 +117,22 @@ export function uploadPatientDocument(patientId, file, documentType = "genomics"
   return request(`/api/patients/${encodeURIComponent(patientId)}/documents`, { method: "POST", body: form });
 }
 
+export function submitClinicalData(patientId, payload) {
+  return request(`/api/patients/${encodeURIComponent(patientId)}/clinical-data`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
+
+export function approvePatientReport(patientId, payload) {
+  return request(`/api/patients/${encodeURIComponent(patientId)}/report-approval`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
+
 export function getGenomicsSchema() {
   return request("/api/genomics/schema");
 }
@@ -139,7 +174,7 @@ export function explainFusion(patientId, moduleOutputs, disabledModalities = [])
   });
 }
 
-export async function downloadPdf(patientId, moduleOutputs, fusionOutput) {
+export async function downloadPdf(patientId, moduleOutputs, fusionOutput, reportText = "", doctorNotes = "") {
   const response = await request("/api/reports/pdf", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -147,6 +182,8 @@ export async function downloadPdf(patientId, moduleOutputs, fusionOutput) {
       patient_id: patientId,
       module_outputs: moduleOutputs,
       fusion_output: fusionOutput,
+      report_text: reportText || undefined,
+      doctor_notes: doctorNotes || undefined,
     }),
   });
   const blob = await response.blob();
@@ -154,6 +191,17 @@ export async function downloadPdf(patientId, moduleOutputs, fusionOutput) {
   const anchor = document.createElement("a");
   anchor.href = url;
   anchor.download = `${patientId}_oralcare_ai_report.pdf`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+export async function downloadApprovedReport(patientId) {
+  const response = await requestBinary(`/api/patients/${encodeURIComponent(patientId)}/approved-report/pdf`);
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `${patientId}_approved_oralcare_ai_report.pdf`;
   anchor.click();
   URL.revokeObjectURL(url);
 }
@@ -183,5 +231,27 @@ export function sendPatientChat(patientId, sessionId, message, moduleOutputs, fu
       fusion_output: fusionOutput,
       use_llm: true,
     }),
+  });
+}
+
+export function getTechnicianPatients() {
+  return request("/api/technician/patients");
+}
+
+export function getTechnicianDoctors() {
+  return request("/api/technician/doctors");
+}
+
+export function createPatient(payload) {
+  return request("/api/patients", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
+
+export function recordProcessingAppointment(patientId) {
+  return request(`/api/patients/${encodeURIComponent(patientId)}/appointments/record-processing`, {
+    method: "POST",
   });
 }

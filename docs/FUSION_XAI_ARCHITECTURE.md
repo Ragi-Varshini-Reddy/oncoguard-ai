@@ -1,8 +1,8 @@
 # Fusion + Interactive XAI Architecture
 
-## Current V1
+## Current V2
 
-The current fusion engine is an evidence-weighted late-fusion model. It is intentionally deterministic and CPU-fast so it can operate before all modalities have patient-matched training data.
+The current fusion engine is a gated evidence-weighted late-fusion model. It is intentionally deterministic and CPU-fast so it can operate before all modalities have patient-matched training data.
 
 Inputs:
 
@@ -17,6 +17,8 @@ Weighting uses:
 - modality availability
 - quality penalties from `quality_flags`
 - prediction strength
+- agreement with the active-modality consensus
+- a high-risk guardrail that prevents one high-confidence high-risk branch from being diluted away by lower-risk branches
 
 Outputs:
 
@@ -25,6 +27,7 @@ Outputs:
 - fusion confidence
 - modality contributions
 - modality evidence
+- raw/gated weights, signal strength, and agreement factor per modality
 - decision trace
 - what-if leave-one-out deltas
 - quality summary

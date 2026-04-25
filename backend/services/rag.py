@@ -1,6 +1,8 @@
 import os
 import uuid
 import logging
+import hashlib
+import math
 from typing import List
 
 import chromadb
@@ -55,6 +57,25 @@ def chunk_text(text: str, chunk_size: int = 1000, overlap: int = 200) -> List[st
         
     return chunks
 
+def _local_embeddings(texts: List[str], dim: int = 64) -> List[List[float]]:
+    """Create deterministic local embeddings so RAG never downloads a model at runtime."""
+
+    embeddings: List[List[float]] = []
+    for text in texts:
+        vector = [0.0] * dim
+        tokens = text.lower().split()
+        if not tokens:
+            embeddings.append(vector)
+            continue
+        for token in tokens:
+            digest = hashlib.sha256(token.encode("utf-8")).digest()
+            index = int.from_bytes(digest[:2], "big") % dim
+            sign = 1.0 if digest[2] % 2 == 0 else -1.0
+            vector[index] += sign
+        norm = math.sqrt(sum(value * value for value in vector)) or 1.0
+        embeddings.append([round(value / norm, 6) for value in vector])
+    return embeddings
+
 def index_patient_document(patient_id: str, file_path: str, filename: str) -> int:
     """Parses a document, chunks it, and indexes it into ChromaDB."""
     if not collection:
@@ -88,12 +109,39 @@ def index_patient_document(patient_id: str, file_path: str, filename: str) -> in
             "chunk_index": i
         })
         
-    collection.add(
-        documents=documents,
-        metadatas=metadatas,
-        ids=ids
-    )
+    try:
+        collection.add(
+            documents=documents,
+            embeddings=_local_embeddings(documents),
+            metadatas=metadatas,
+            ids=ids
+        )
+    except Exception as e:
+        logger.error(f"RAG Indexing failed: {e}")
+        return 0
     
+    return len(chunks)
+
+def index_patient_text(patient_id: str, text: str, source_name: str) -> int:
+    """Indexes processed model/fusion summaries without exposing raw image bytes."""
+    if not collection or not text.strip():
+        return 0
+    chunks = chunk_text(text, chunk_size=800, overlap=50)
+    ids = [f"{patient_id}_{uuid.uuid4().hex[:8]}" for _ in chunks]
+    metadatas = [
+        {"patient_id": patient_id, "filename": source_name, "chunk_index": index}
+        for index, _ in enumerate(chunks)
+    ]
+    try:
+        collection.add(
+            documents=chunks,
+            embeddings=_local_embeddings(chunks),
+            metadatas=metadatas,
+            ids=ids,
+        )
+    except Exception as e:
+        logger.error(f"RAG Text Indexing failed: {e}")
+        return 0
     return len(chunks)
 
 def retrieve_patient_history(patient_id: str, query: str, top_k: int = 3) -> str:
@@ -103,7 +151,7 @@ def retrieve_patient_history(patient_id: str, query: str, top_k: int = 3) -> str
         
     try:
         results = collection.query(
-            query_texts=[query],
+            query_embeddings=_local_embeddings([query]),
             n_results=top_k,
             where={"patient_id": patient_id}
         )

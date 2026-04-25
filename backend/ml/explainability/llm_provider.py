@@ -41,7 +41,7 @@ def _build_prompt(
         context_text = context_text[:max_context_chars] + "\n...TRUNCATED..."
     history_text = "\n".join(
         f"{item.get('role', 'user').upper()}: {item.get('content', '')}"
-        for item in history[-10:]
+        for item in history
     ) or "No previous conversation."
     system_prompt = str(
         context.get("llm_system_prompt")
@@ -49,6 +49,12 @@ def _build_prompt(
     )
     if "rag_retrieved_documents" in str(context):
         system_prompt += " The context includes 'rag_retrieved_documents' which are excerpts from the patient's past clinical PDFs. Base your answers on these retrieved records when relevant."
+    system_prompt += (
+        " Answer the current patient question directly. Do not paste a generic risk summary unless the user asked about risk."
+        " If the user asks who their doctor is, use doctor_details. If they ask about daily intraoral AI check, explain image upload, date-wise storage, and risk trend tracking."
+        " If they ask for suggestions, provide at most three practical suggestions using risk_guidance and XAI context."
+        " Keep a casual, reassuring healthcare tone and avoid sounding like a report."
+    )
     return f"""{system_prompt}
 
 Recent conversation:
@@ -89,7 +95,7 @@ def _call_gemini(prompt: str, llm_cfg: dict[str, Any]) -> LLMResult:
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is not set")
     gemini_cfg = llm_cfg.get("gemini", {})
-    model = str(gemini_cfg.get("model", "gemini-3-pro-preview"))
+    model = str(gemini_cfg.get("model", "gemini-3-flash-preview"))
     timeout = float(gemini_cfg.get("timeout_seconds", 30))
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
     payload = {

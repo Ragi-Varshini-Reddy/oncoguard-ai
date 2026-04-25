@@ -30,6 +30,40 @@ class PatientQueryTest(unittest.TestCase):
             },
         )
         self.fusion = run_fusion("P-Q", [self.module_output])
+        self.clinical_module_output = ModuleOutput(
+            patient_id="P-Q",
+            modality="clinical",
+            status="available",
+            embedding=[0.2] * 128,
+            embedding_dim=128,
+            prediction={"risk_score": 0.74, "diagnosis_probability": 0.71},
+            confidence=0.81,
+            explanations={
+                "feature_values": {
+                    "age": 54,
+                    "gender": "male",
+                    "tobacco_use": True,
+                    "alcohol_use": False,
+                    "poor_oral_hygiene": True,
+                },
+                "top_features": [
+                    {
+                        "feature": "tobacco_use",
+                        "direction": "increases_risk",
+                        "importance_score": 0.28,
+                        "shap_value": 0.28,
+                    },
+                    {
+                        "feature": "poor_oral_hygiene",
+                        "direction": "increases_risk",
+                        "importance_score": 0.12,
+                        "shap_value": 0.12,
+                    },
+                ],
+                "recommendations": ["Tobacco use is a positive SHAP driver here; offer cessation counseling."],
+            },
+        )
+        self.clinical_fusion = run_fusion("P-Q", [self.module_output, self.clinical_module_output])
 
     def test_patient_query_answers_from_available_context(self) -> None:
         from backend.app import main
@@ -53,6 +87,61 @@ class PatientQueryTest(unittest.TestCase):
         self.assertIn("genomics", body["sources_used"])
         self.assertIn("fusion", body["sources_used"])
         self.assertEqual(body["answer_mode"], "rule_based")
+
+    def test_patient_query_includes_shap_risk_change_suggestion(self) -> None:
+        body = answer_patient_query(
+            "P-Q",
+            "What should I do now?",
+            [self.module_output, self.clinical_module_output],
+            self.clinical_fusion,
+            config={"llm": {"enabled": False}},
+            use_llm=False,
+        )
+        self.assertIn("Current risk is about", body["answer"])
+        self.assertIn("Quit smoking", body["answer"])
+        self.assertIn("illustrative SHAP-adjusted risk", body["answer"])
+        self.assertIn("Build a daily oral self-check", body["answer"])
+
+    def test_patient_query_skips_habit_change_without_bad_habit(self) -> None:
+        clean_clinical_output = ModuleOutput(
+            patient_id="P-Q",
+            modality="clinical",
+            status="available",
+            embedding=[0.15] * 128,
+            embedding_dim=128,
+            prediction={"risk_score": 0.42, "diagnosis_probability": 0.38},
+            confidence=0.64,
+            explanations={
+                "feature_values": {
+                    "age": 41,
+                    "gender": "female",
+                    "tobacco_use": False,
+                    "alcohol_use": False,
+                    "poor_oral_hygiene": False,
+                },
+                "top_features": [
+                    {
+                        "feature": "poor_oral_hygiene",
+                        "direction": "increases_risk",
+                        "importance_score": 0.16,
+                        "shap_value": 0.16,
+                    }
+                ],
+                "recommendations": [],
+            },
+        )
+        clean_fusion = run_fusion("P-Q", [self.module_output, clean_clinical_output])
+        body = answer_patient_query(
+            "P-Q",
+            "What should I do now?",
+            [self.module_output, clean_clinical_output],
+            clean_fusion,
+            config={"llm": {"enabled": False}},
+            use_llm=False,
+        )
+        self.assertNotIn("Quit smoking", body["answer"])
+        self.assertNotIn("Reduce or stop alcohol", body["answer"])
+        self.assertIn("Build a daily oral self-check", body["answer"])
 
     def test_llm_patient_query_path_uses_provider(self) -> None:
         config = {"llm": {"enabled": True, "allow_rule_based_fallback": True, "provider": "ollama"}}

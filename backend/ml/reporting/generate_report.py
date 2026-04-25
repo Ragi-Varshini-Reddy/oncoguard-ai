@@ -124,5 +124,10 @@ def _explanation_block(output: ModuleOutput) -> str:
         detail = "<p>Visual explanation placeholder available in the dashboard.</p>"
     else:
         detail = "<p>No detailed explanation returned.</p>"
+    recommendations = output.explanations.get("recommendations", [])
+    recommendation_block = ""
+    if recommendations:
+        items = "".join(f"<li>{html.escape(str(item))}</li>" for item in recommendations)
+        recommendation_block = f"<h4>Suggested actions</h4><ul>{items}</ul>"
     note = output.explanations.get("note", "")
-    return f"<h3>{html.escape(output.modality.title())}</h3>{detail}<p class=\"small\">{html.escape(note)}</p>"
+    return f"<h3>{html.escape(output.modality.title())}</h3>{detail}{recommendation_block}<p class=\"small\">{html.escape(note)}</p>"

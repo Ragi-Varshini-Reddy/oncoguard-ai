@@ -1,0 +1,75 @@
+flowchart TB
+    subgraph UI["React + Vite Frontend"]
+        Login["Demo Login"]
+        PatientUI["Patient Dashboard"]
+        DoctorUI["Doctor Dashboard"]
+        TechUI["Lab Technician Dashboard"]
+        ChatUI["Patient Chatbot"]
+        ReportsUI["Reports + PDF Download"]
+    end
+
+    subgraph API["FastAPI Backend"]
+        AuthAPI["Auth + Role Access"]
+        PatientAPI["Patient APIs"]
+        UploadAPI["Document Upload APIs"]
+        FusionAPI["Fusion + XAI APIs"]
+        ReportAPI["Report Approval + PDF APIs"]
+        ChatAPI["Patient Chat + RAG APIs"]
+        AppointmentAPI["Appointment APIs"]
+    end
+
+    subgraph ML["AI/ML Layer"]
+        Intraoral["Intraoral EfficientNet-B0"]
+        Clinical["Clinical Risk Model"]
+        Histo["Histopathology EfficientNet-B4 + Grad-CAM"]
+        Genomics["Genomics Artifact Model"]
+        Fusion["Evidence-Weighted Fusion"]
+        XAI["Decision Trace + What-if XAI"]
+    end
+
+    subgraph Data["Persistence Layer"]
+        MySQL["MySQL"]
+        Files["Artifacts and uploaded files"]
+        Chroma["ChromaDB vector store"]
+    end
+
+    subgraph LLM["LLM Layer"]
+        Gemini["Gemini"]
+        Ollama["Ollama"]
+        RuleFallback["Deterministic fallback"]
+    end
+
+    Login --> AuthAPI
+    PatientUI --> PatientAPI
+    DoctorUI --> PatientAPI
+    TechUI --> UploadAPI
+    ReportsUI --> ReportAPI
+    ChatUI --> ChatAPI
+    PatientUI --> AppointmentAPI
+    DoctorUI --> AppointmentAPI
+
+    UploadAPI --> Intraoral
+    UploadAPI --> Histo
+    UploadAPI --> Genomics
+    PatientAPI --> Clinical
+    Intraoral --> Fusion
+    Clinical --> Fusion
+    Histo --> Fusion
+    Genomics --> Fusion
+    Fusion --> XAI
+
+    AuthAPI --> MySQL
+    PatientAPI --> MySQL
+    UploadAPI --> MySQL
+    UploadAPI --> Files
+    FusionAPI --> MySQL
+    ReportAPI --> MySQL
+    ReportAPI --> Files
+    ChatAPI --> Chroma
+    ChatAPI --> MySQL
+    Fusion --> MySQL
+    XAI --> Chroma
+
+    ChatAPI --> Gemini
+    ChatAPI --> Ollama
+    ChatAPI --> RuleFallback

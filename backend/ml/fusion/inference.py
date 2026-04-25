@@ -72,11 +72,12 @@ def _run_fusion(
     fusion_input = FusionInput(patient_id=patient_id, module_outputs=parsed_outputs, modality_mask=mask)
     fusion = EvidenceWeightedFusion(cfg)
     evidence = fusion.build_evidence(fusion_input.module_outputs, fusion_input.modality_mask)
-    prediction = fusion.predict(evidence)
+    raw_prediction = fusion.predict(evidence)
+    fusion_details = raw_prediction.get("fusion_details", {})
     confidence, quality_summary = fusion.confidence(evidence)
     heads = PredictionHeads(cfg).run(
-        diagnosis_probability=float(prediction["diagnosis"]["probability"]),
-        risk_score=float(prediction["risk"]["score"]),
+        diagnosis_probability=float(raw_prediction["diagnosis"]["probability"]),
+        risk_score=float(raw_prediction["risk"]["score"]),
         raw_confidence=confidence,
         quality_summary=quality_summary,
     )
@@ -92,7 +93,7 @@ def _run_fusion(
     }
     confidence = float(heads["confidence_calibration_head"]["confidence"])
     warnings = _collect_warnings(fusion_input.module_outputs, fusion_input.modality_mask, evidence, cfg)
-    decision_trace = _decision_trace(evidence, prediction, confidence, disabled)
+    decision_trace = _decision_trace(evidence, prediction, confidence, disabled, fusion_details)
     what_if = (
         _compute_what_if(patient_id, parsed_outputs, modality_mask, cfg, disabled, prediction)
         if include_what_if
@@ -110,6 +111,7 @@ def _run_fusion(
         what_if=what_if,
         quality_summary=quality_summary,
         prediction_heads=heads,
+        fusion_details=fusion_details,
         warnings=warnings,
     )
 
@@ -204,6 +206,7 @@ def _decision_trace(
     prediction: dict[str, Any],
     confidence: float,
     disabled: set[str],
+    fusion_details: dict[str, Any] | None = None,
 ) -> list[str]:
     active = sorted(
         [item for item in evidence.values() if item.contribution > 0],
@@ -214,12 +217,17 @@ def _decision_trace(
         return ["No available enabled modalities were provided, so fusion returned zero-confidence output."]
 
     trace = [
-        f"Fused {len(active)} enabled modality output(s) using confidence, quality, and configured modality priors.",
+        f"Fused {len(active)} enabled modality output(s) using confidence, quality, agreement, prediction strength, and configured modality priors.",
         "Top contributors: "
         + ", ".join(f"{item.modality} {item.contribution:.1%}" for item in active[:3])
         + ".",
         f"Final risk is {prediction['risk']['class']} ({prediction['risk']['score']:.1%}) with fusion confidence {confidence:.1%}.",
     ]
+    guardrail = (fusion_details or {}).get("high_risk_guardrail")
+    if guardrail:
+        trace.append(
+            f"High-risk guardrail lifted the fused score because {guardrail['modality']} produced high-confidence high-risk evidence."
+        )
     if disabled:
         trace.append("User-disabled modalities: " + ", ".join(sorted(disabled)) + ".")
     return trace

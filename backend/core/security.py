@@ -43,9 +43,12 @@ def assert_patient_access(actor: dict[str, Any], patient_id: str, *, allow_lab_u
             doctor = row_to_dict(conn.execute("SELECT * FROM doctors WHERE user_id = ?", (actor["user_id"],)).fetchone())
             if doctor and patient["doctor_id"] == doctor["doctor_id"]:
                 return
-        if role == "lab_technician" and allow_lab_upload:
-            return
+        if role == "lab_technician":
+            lab_tech = row_to_dict(conn.execute("SELECT * FROM lab_technicians WHERE user_id = ?", (actor["user_id"],)).fetchone())
+            if lab_tech and patient["lab_technician_id"] == lab_tech["lab_technician_id"]:
+                return
     raise HTTPException(status_code=403, detail="Patient is not accessible to this user")
+
 
 
 def actor_profile(actor: dict[str, Any]) -> dict[str, Any]:

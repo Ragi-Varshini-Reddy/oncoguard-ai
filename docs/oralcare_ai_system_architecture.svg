@@ -1,0 +1,204 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1040" viewBox="0 0 1600 1040" role="img" aria-labelledby="title desc">
+  <title id="title">OralCare-AI System Architecture</title>
+  <desc id="desc">Layered system architecture for OralCare-AI showing role dashboards, FastAPI backend, AI modality models, fusion and explainability, persistence, RAG, and report outputs.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f5f8fb; }
+      .panel { fill: #ffffff; stroke: #d7e2ea; stroke-width: 2; }
+      .panel-title { font: 700 22px Arial, Helvetica, sans-serif; fill: #122231; }
+      .panel-subtitle { font: 500 13px Arial, Helvetica, sans-serif; fill: #657384; }
+      .box { fill: #ffffff; stroke: #c8d7e1; stroke-width: 1.6; }
+      .box-dark { fill: #17313d; stroke: #17313d; }
+      .box-blue { fill: #e8f3fb; stroke: #77aac9; }
+      .box-green { fill: #edf7f1; stroke: #84bd97; }
+      .box-amber { fill: #fff6df; stroke: #ddb562; }
+      .box-red { fill: #fff0ee; stroke: #d58a83; }
+      .box-purple { fill: #f4efff; stroke: #aa8ed8; }
+      .box-teal { fill: #e9f7f7; stroke: #70b9ba; }
+      .label { font: 700 15px Arial, Helvetica, sans-serif; fill: #122231; }
+      .label-light { font: 700 15px Arial, Helvetica, sans-serif; fill: #ffffff; }
+      .small { font: 500 12px Arial, Helvetica, sans-serif; fill: #506171; }
+      .small-light { font: 500 12px Arial, Helvetica, sans-serif; fill: #dce8ee; }
+      .tiny { font: 500 11px Arial, Helvetica, sans-serif; fill: #657384; }
+      .arrow { fill: none; stroke: #3d6675; stroke-width: 2.2; marker-end: url(#arrow); }
+      .arrow-soft { fill: none; stroke: #88a8b5; stroke-width: 1.8; marker-end: url(#arrowSoft); }
+      .arrow-strong { fill: none; stroke: #b13d3d; stroke-width: 2.5; marker-end: url(#arrowRed); }
+      .pill { fill: #ecf2f5; stroke: #d7e2ea; }
+      .note { fill: #fbfdfe; stroke: #d7e2ea; stroke-dasharray: 6 6; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#3d6675"/>
+    </marker>
+    <marker id="arrowSoft" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#88a8b5"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#b13d3d"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#17313d" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <rect class="bg" width="1600" height="1040"/>
+
+  <text x="70" y="68" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800" fill="#122231">OralCare-AI System Architecture</text>
+  <text x="70" y="96" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="500" fill="#657384">Explainable multimodal oral cancer decision-support workflow: patient, lab, doctor, AI fusion, RAG chatbot, and approved reports.</text>
+
+  <!-- Frontend -->
+  <rect x="60" y="135" width="360" height="470" rx="18" class="panel" filter="url(#shadow)"/>
+  <text x="92" y="176" class="panel-title">Frontend Experience</text>
+  <text x="92" y="198" class="panel-subtitle">React + Vite role-based dashboards</text>
+
+  <rect x="92" y="230" width="296" height="66" rx="12" class="box-blue"/>
+  <text x="118" y="257" class="label">Patient Dashboard</text>
+  <text x="118" y="278" class="small">Daily intraoral upload, risk trend, chat, PDF</text>
+
+  <rect x="92" y="318" width="296" height="66" rx="12" class="box-green"/>
+  <text x="118" y="345" class="label">Doctor Dashboard</text>
+  <text x="118" y="366" class="small">Patient review, XAI, charts, approve report</text>
+
+  <rect x="92" y="406" width="296" height="66" rx="12" class="box-amber"/>
+  <text x="118" y="433" class="label">Lab Technician Dashboard</text>
+  <text x="118" y="454" class="small">Create patient, upload modality results</text>
+
+  <rect x="92" y="494" width="296" height="66" rx="12" class="box-purple"/>
+  <text x="118" y="521" class="label">Patient Chat UI</text>
+  <text x="118" y="542" class="small">Session chat grounded in patient context</text>
+
+  <!-- API -->
+  <rect x="500" y="135" width="600" height="470" rx="18" class="panel" filter="url(#shadow)"/>
+  <text x="532" y="176" class="panel-title">Backend API and Workflow Orchestration</text>
+  <text x="532" y="198" class="panel-subtitle">FastAPI + Pydantic contracts + role-based access control</text>
+
+  <rect x="532" y="230" width="250" height="58" rx="12" class="box-dark"/>
+  <text x="558" y="254" class="label-light">Auth + Access Control</text>
+  <text x="558" y="274" class="small-light">Patient, doctor, lab technician roles</text>
+
+  <rect x="818" y="230" width="250" height="58" rx="12" class="box-blue"/>
+  <text x="844" y="254" class="label">Patient APIs</text>
+  <text x="844" y="274" class="small">Records, documents, alerts, risk history</text>
+
+  <rect x="532" y="314" width="250" height="58" rx="12" class="box-amber"/>
+  <text x="558" y="338" class="label">Upload + Processing APIs</text>
+  <text x="558" y="358" class="small">Clinical, image, histology, genomics</text>
+
+  <rect x="818" y="314" width="250" height="58" rx="12" class="box-teal"/>
+  <text x="844" y="338" class="label">Fusion + XAI APIs</text>
+  <text x="844" y="358" class="small">Decision trace and what-if analysis</text>
+
+  <rect x="532" y="398" width="250" height="58" rx="12" class="box-green"/>
+  <text x="558" y="422" class="label">Report Approval APIs</text>
+  <text x="558" y="442" class="small">Doctor edits, approves, exports PDF</text>
+
+  <rect x="818" y="398" width="250" height="58" rx="12" class="box-purple"/>
+  <text x="844" y="422" class="label">Chat + RAG APIs</text>
+  <text x="844" y="442" class="small">History, retrieval, LLM provider fallback</text>
+
+  <rect x="532" y="482" width="250" height="58" rx="12" class="box-red"/>
+  <text x="558" y="506" class="label">Appointment APIs</text>
+  <text x="558" y="526" class="small">Requests, schedule, complete, notes</text>
+
+  <rect x="818" y="482" width="250" height="58" rx="12" class="box-blue"/>
+  <text x="844" y="506" class="label">Audit + Persistence Hooks</text>
+  <text x="844" y="526" class="small">Model runs, approvals, chat sessions</text>
+
+  <!-- AI layer -->
+  <rect x="1180" y="135" width="360" height="470" rx="18" class="panel" filter="url(#shadow)"/>
+  <text x="1212" y="176" class="panel-title">AI/ML Layer</text>
+  <text x="1212" y="198" class="panel-subtitle">Modality models normalized to ModuleOutput</text>
+
+  <rect x="1212" y="230" width="296" height="58" rx="12" class="box-blue"/>
+  <text x="1238" y="254" class="label">Intraoral Model</text>
+  <text x="1238" y="274" class="small">EfficientNet-B0, daily image risk</text>
+
+  <rect x="1212" y="306" width="296" height="58" rx="12" class="box-green"/>
+  <text x="1238" y="330" class="label">Clinical Model</text>
+  <text x="1238" y="350" class="small">Structured features + interpretable drivers</text>
+
+  <rect x="1212" y="382" width="296" height="58" rx="12" class="box-amber"/>
+  <text x="1238" y="406" class="label">Histopathology Model</text>
+  <text x="1238" y="426" class="small">EfficientNet-B4 + Grad-CAM heatmap</text>
+
+  <rect x="1212" y="458" width="296" height="58" rx="12" class="box-purple"/>
+  <text x="1238" y="482" class="label">Genomics Model</text>
+  <text x="1238" y="502" class="small">Artifact-backed gene-panel classifier</text>
+
+  <rect x="1212" y="535" width="296" height="48" rx="12" class="box-dark"/>
+  <text x="1238" y="565" class="label-light">Standard ModuleOutput Contract</text>
+
+  <!-- Fusion center -->
+  <rect x="500" y="660" width="600" height="210" rx="18" class="panel" filter="url(#shadow)"/>
+  <text x="532" y="700" class="panel-title">Evidence-Weighted Fusion + Explainability</text>
+  <text x="532" y="722" class="panel-subtitle">Missing-modality-aware decision layer with doctor-validatable trace</text>
+
+  <rect x="532" y="752" width="160" height="72" rx="12" class="box-teal"/>
+  <text x="558" y="781" class="label">Fusion</text>
+  <text x="558" y="802" class="small">quality, confidence, priors</text>
+
+  <rect x="720" y="752" width="160" height="72" rx="12" class="box-red"/>
+  <text x="746" y="781" class="label">Risk Heads</text>
+  <text x="746" y="802" class="small">risk, diagnosis, confidence</text>
+
+  <rect x="908" y="752" width="160" height="72" rx="12" class="box-purple"/>
+  <text x="934" y="781" class="label">XAI</text>
+  <text x="934" y="802" class="small">trace, what-if, warnings</text>
+
+  <!-- Data -->
+  <rect x="60" y="660" width="360" height="210" rx="18" class="panel" filter="url(#shadow)"/>
+  <text x="92" y="700" class="panel-title">Persistence Layer</text>
+  <text x="92" y="722" class="panel-subtitle">Clinical workflow memory</text>
+
+  <rect x="92" y="752" width="296" height="44" rx="10" class="box-blue"/>
+  <text x="118" y="780" class="label">MySQL</text>
+  <text x="190" y="780" class="small">users, patients, runs, approvals</text>
+
+  <rect x="92" y="812" width="296" height="44" rx="10" class="box-green"/>
+  <text x="118" y="840" class="label">Artifacts</text>
+  <text x="205" y="840" class="small">uploads, models, PDFs</text>
+
+  <!-- RAG/LLM -->
+  <rect x="1180" y="660" width="360" height="210" rx="18" class="panel" filter="url(#shadow)"/>
+  <text x="1212" y="700" class="panel-title">RAG + LLM Layer</text>
+  <text x="1212" y="722" class="panel-subtitle">Patient-friendly answers from processed context</text>
+
+  <rect x="1212" y="752" width="296" height="44" rx="10" class="box-purple"/>
+  <text x="1238" y="780" class="label">ChromaDB</text>
+  <text x="1328" y="780" class="small">processed patient context</text>
+
+  <rect x="1212" y="812" width="140" height="44" rx="10" class="box-blue"/>
+  <text x="1238" y="840" class="label">Gemini</text>
+
+  <rect x="1368" y="812" width="140" height="44" rx="10" class="box-green"/>
+  <text x="1394" y="840" class="label">Ollama</text>
+
+  <!-- Outputs -->
+  <rect x="60" y="915" width="1480" height="70" rx="18" class="note"/>
+  <text x="92" y="945" class="label">Outputs</text>
+  <text x="178" y="945" class="small">Doctor-approved report, patient PDF download, risk timeline, alerts, appointment status, chat explanations, modality contribution charts, decision trace validation.</text>
+  <text x="92" y="970" class="tiny">Safety posture: decision-support only, doctor-in-the-loop approval, no raw image bytes sent to LLM, patient-specific RAG context, fallback when LLM is unavailable.</text>
+
+  <!-- Arrows -->
+  <path d="M420 370 C455 370, 465 370, 500 370" class="arrow"/>
+  <path d="M1100 370 C1135 370, 1145 370, 1180 370" class="arrow"/>
+  <path d="M1360 605 C1360 630, 1040 620, 1015 660" class="arrow"/>
+  <path d="M800 605 L800 660" class="arrow"/>
+  <path d="M500 765 C460 765, 455 765, 420 765" class="arrow-soft"/>
+  <path d="M1100 765 C1140 765, 1145 765, 1180 765" class="arrow-soft"/>
+  <path d="M800 870 L800 915" class="arrow-strong"/>
+  <path d="M240 870 C240 900, 240 900, 240 915" class="arrow-soft"/>
+  <path d="M1360 870 C1360 900, 1360 900, 1360 915" class="arrow-soft"/>
+
+  <!-- Connector labels -->
+  <rect x="446" y="344" width="112" height="28" rx="14" class="pill"/>
+  <text x="463" y="363" class="tiny">HTTPS JSON</text>
+
+  <rect x="1116" y="344" width="122" height="28" rx="14" class="pill"/>
+  <text x="1133" y="363" class="tiny">ModuleOutput</text>
+
+  <rect x="742" y="625" width="116" height="28" rx="14" class="pill"/>
+  <text x="757" y="644" class="tiny">FusionOutput</text>
+
+  <rect x="1118" y="742" width="120" height="28" rx="14" class="pill"/>
+  <text x="1135" y="761" class="tiny">RAG context</text>
+</svg>

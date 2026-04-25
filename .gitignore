@@ -6,25 +6,42 @@ __pycache__/
 .mypy_cache/
 .venv/
 venv/
+env/
+*.env
+*.env.*
+*.sqlite3
 
 # Frontend
 frontend/node_modules/
 frontend/dist/
+frontend/build/
+.next/
+out/
 
-# Generated local artifacts
-artifacts/*.joblib
-artifacts/*.pkl
-artifacts/*.pt
-artifacts/*.pth
-artifacts/*.onnx
-artifacts/*.sqlite3
+# Generated local artifacts & storage
 artifacts/documents/
+artifacts/chromadb/
+artifacts/reporting/
+artifacts/models/*
+!artifacts/models/.gitkeep
+!artifacts/.gitkeep
 
-# Local data exports
-data/processed/*.csv
-data/processed/*.parquet
+# Ignore large model files even if in other locations
+*.joblib
+*.pkl
+*.pt
+*.pth
+*.onnx
+*.h5
+*.weights
+
+# Local data
+data/raw/
+data/processed/
 
 # OS/editor
 .DS_Store
 .idea/
 .vscode/
+*.swp
+*.swo
